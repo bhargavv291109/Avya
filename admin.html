@@ -4,71 +4,570 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AVYA Admin — Reviews</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#070707;color:#f4f4f4;font-family:Inter,Arial,sans-serif}
-.wrap{max-width:1100px;margin:auto;padding:32px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
-.logo{font-size:28px;font-weight:900;letter-spacing:-1px}.muted{color:#9b9b9b}.grid{display:grid;gap:16px}
-.card{background:#111;border:1px solid #292929;border-radius:18px;padding:20px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.approve{background:#d9ff3f;color:#090909}.reject{background:#292929;color:#fff}.danger{background:#5b1717;color:#fff}.feature{background:#292929;color:#fff}
-input{width:100%;padding:13px;border-radius:10px;border:1px solid #333;background:#0b0b0b;color:#fff;margin:8px 0 14px}
-.login{max-width:430px;margin:10vh auto}.hidden{display:none}.review{display:grid;gap:12px}.stars{letter-spacing:2px}.tag{font-size:12px;border:1px solid #333;border-radius:999px;padding:5px 9px;color:#bdbdbd}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#070707;
+  color:#f4f4f4;
+  font-family:Inter,Arial,sans-serif
+}
+
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:32px 20px
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:28px
+}
+
+.logo{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-1px
+}
+
+.muted{
+  color:#9b9b9b
+}
+
+.grid{
+  display:grid;
+  gap:16px
+}
+
+.card{
+  background:#111;
+  border:1px solid #292929;
+  border-radius:18px;
+  padding:20px
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:800;
+  cursor:pointer
+}
+
+.approve{
+  background:#d9ff3f;
+  color:#090909
+}
+
+.reject{
+  background:#292929;
+  color:#fff
+}
+
+.danger{
+  background:#5b1717;
+  color:#fff
+}
+
+.feature{
+  background:#292929;
+  color:#fff
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #333;
+  background:#0b0b0b;
+  color:#fff;
+  margin:8px 0 14px
+}
+
+.login{
+  max-width:430px;
+  margin:10vh auto
+}
+
+.hidden{
+  display:none
+}
+
+.review{
+  display:grid;
+  gap:12px
+}
+
+.stars{
+  letter-spacing:2px
+}
+
+.tag{
+  font-size:12px;
+  border:1px solid #333;
+  border-radius:999px;
+  padding:5px 9px;
+  color:#bdbdbd
+}
+
+.status{
+  min-height:20px;
+  margin-top:10px
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
+  <!-- LOGIN -->
   <div id="login" class="login card">
+
     <h1>AVYA Admin</h1>
-    <p class="muted">Review management</p>
-    <input id="password" type="password" placeholder="Admin password">
-    <button class="approve" onclick="login()">Login</button>
-    <p id="loginStatus" class="muted"></p>
+
+    <p class="muted">
+      Review management
+    </p>
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Admin password"
+      autocomplete="current-password"
+    >
+
+    <button
+      type="button"
+      class="approve"
+      id="loginBtn"
+    >
+      Login
+    </button>
+
+    <p id="loginStatus" class="muted status"></p>
+
   </div>
 
+
+  <!-- ADMIN PANEL -->
   <div id="panel" class="hidden">
+
     <div class="top">
-      <div><div class="logo">AVYA</div><div class="muted">Reviews dashboard</div></div>
-      <button class="reject" onclick="logout()">Logout</button>
-    </div>
-    <div id="reviews" class="grid"></div>
-  </div>
-</div>
-<script>
-async function login(){
-  const password=document.getElementById("password").value;
-  const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
-  const d=await r.json();
-  if(r.ok){document.getElementById("login").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");load();}
-  else document.getElementById("loginStatus").textContent=d.error||"Login failed";
-}
-async function logout(){await fetch("/api/admin/logout",{method:"POST"});location.reload();}
-function stars(n){return "★".repeat(n)+"☆".repeat(5-n)}
-async function load(){
-  const r=await fetch("/api/admin/reviews");
-  if(r.status===401){location.reload();return}
-  const data=await r.json();
-  const box=document.getElementById("reviews");
-  if(!data.length){box.innerHTML='<div class="card"><h3>No reviews yet.</h3><p class="muted">New customer submissions will appear here.</p></div>';return}
-  box.innerHTML=data.map(x=>`
-    <article class="card review">
-      <div class="row"><strong>${esc(x.name)}</strong><span class="tag">${esc(x.service)}</span><span class="tag">${x.approved?'Approved':'Pending'}</span>${x.featured?'<span class="tag">Featured</span>':''}</div>
-      <div class="stars">${stars(x.rating)}</div>
-      <div>${esc(x.review)}</div>
-      <div class="muted">${new Date(x.created_at).toLocaleString()}</div>
-      <div class="row">
-        ${!x.approved?`<button class="approve" onclick="action(${x.id},'approve')">Approve</button>`:''}
-        ${x.approved?`<button class="feature" onclick="action(${x.id},'feature')">${x.featured?'Unfeature':'Feature'}</button>`:''}
-        ${!x.approved?`<button class="reject" onclick="action(${x.id},'reject')">Reject</button>`:''}
-        <button class="danger" onclick="action(${x.id},'delete')">Delete</button>
+
+      <div>
+        <div class="logo">AVYA</div>
+        <div class="muted">
+          Reviews dashboard
+        </div>
       </div>
-    </article>`).join("");
+
+      <button
+        type="button"
+        class="reject"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
+    </div>
+
+    <div id="reviews" class="grid"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+  const password =
+    document.getElementById("password").value;
+
+  const status =
+    document.getElementById("loginStatus");
+
+  if(!password){
+    status.textContent = "Please enter your admin password.";
+    return;
+  }
+
+  status.textContent = "Logging in...";
+
+  try{
+
+    const r = await fetch(
+      "/api/admin/login",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          password:password
+        })
+      }
+    );
+
+    const d = await r.json();
+
+    if(r.ok){
+
+      document
+        .getElementById("login")
+        .classList.add("hidden");
+
+      document
+        .getElementById("panel")
+        .classList.remove("hidden");
+
+      status.textContent = "";
+
+      await load();
+
+    }else{
+
+      status.textContent =
+        d.error || "Login failed.";
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Server connection failed. Please try again.";
+
+  }
+
 }
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout(){
+
+  try{
+
+    await fetch(
+      "/api/admin/logout",
+      {
+        method:"POST"
+      }
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+  location.reload();
+
+}
+
+
+/* =========================
+   STAR DISPLAY
+========================= */
+
+function stars(n){
+
+  return "★".repeat(n) +
+         "☆".repeat(5-n);
+
+}
+
+
+/* =========================
+   LOAD REVIEWS
+========================= */
+
+async function load(){
+
+  const box =
+    document.getElementById("reviews");
+
+  box.innerHTML =
+    '<div class="card"><p class="muted">Loading reviews...</p></div>';
+
+  try{
+
+    const r =
+      await fetch("/api/admin/reviews");
+
+    if(r.status === 401){
+
+      document
+        .getElementById("panel")
+        .classList.add("hidden");
+
+      document
+        .getElementById("login")
+        .classList.remove("hidden");
+
+      return;
+
+    }
+
+    const data =
+      await r.json();
+
+    if(!data.length){
+
+      box.innerHTML =
+        '<div class="card">' +
+        '<h3>No reviews yet.</h3>' +
+        '<p class="muted">' +
+        'New customer submissions will appear here.' +
+        '</p>' +
+        '</div>';
+
+      return;
+
+    }
+
+    box.innerHTML =
+      data.map(x => `
+
+        <article class="card review">
+
+          <div class="row">
+
+            <strong>
+              ${esc(x.name)}
+            </strong>
+
+            <span class="tag">
+              ${esc(x.service)}
+            </span>
+
+            <span class="tag">
+              ${x.approved ? "Approved" : "Pending"}
+            </span>
+
+            ${
+              x.featured
+              ? '<span class="tag">Featured</span>'
+              : ''
+            }
+
+          </div>
+
+          <div class="stars">
+            ${stars(x.rating)}
+          </div>
+
+          <div>
+            ${esc(x.review)}
+          </div>
+
+          <div class="muted">
+            ${new Date(x.created_at).toLocaleString()}
+          </div>
+
+          <div class="row">
+
+            ${
+              !x.approved
+              ? `
+                <button
+                  type="button"
+                  class="approve"
+                  onclick="action(${x.id},'approve')"
+                >
+                  Approve
+                </button>
+              `
+              : ''
+            }
+
+            ${
+              x.approved
+              ? `
+                <button
+                  type="button"
+                  class="feature"
+                  onclick="action(${x.id},'feature')"
+                >
+                  ${x.featured ? "Unfeature" : "Feature"}
+                </button>
+              `
+              : ''
+            }
+
+            ${
+              !x.approved
+              ? `
+                <button
+                  type="button"
+                  class="reject"
+                  onclick="action(${x.id},'reject')"
+                >
+                  Reject
+                </button>
+              `
+              : ''
+            }
+
+            <button
+              type="button"
+              class="danger"
+              onclick="action(${x.id},'delete')"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+
+      `).join("");
+
+  }catch(error){
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="card">' +
+      '<h3>Could not load reviews.</h3>' +
+      '<p class="muted">' +
+      'Please refresh and try again.' +
+      '</p>' +
+      '</div>';
+
+  }
+
+}
+
+
+/* =========================
+   REVIEW ACTIONS
+========================= */
+
 async function action(id,type){
-  const url=type==='delete'?`/api/admin/reviews/${id}`:`/api/admin/reviews/${id}/${type}`;
-  const method=type==='delete'?'DELETE':'PATCH';
-  const r=await fetch(url,{method});
-  if(r.ok)load(); else alert("Action failed");
+
+  const url =
+    type === "delete"
+    ? `/api/admin/reviews/${id}`
+    : `/api/admin/reviews/${id}/${type}`;
+
+  const method =
+    type === "delete"
+    ? "DELETE"
+    : "PATCH";
+
+  try{
+
+    const r =
+      await fetch(
+        url,
+        {
+          method:method
+        }
+      );
+
+    if(r.ok){
+
+      await load();
+
+    }else{
+
+      alert("Action failed.");
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Server connection failed.");
+
+  }
+
 }
+
+
+/* =========================
+   SECURITY ESCAPE
+========================= */
+
+function esc(v){
+
+  return String(v).replace(
+    /[&<>"']/g,
+    c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[c])
+  );
+
+}
+
+
+/* =========================
+   BUTTON EVENTS
+========================= */
+
+document
+  .getElementById("loginBtn")
+  .addEventListener(
+    "click",
+    login
+  );
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    logout
+  );
+
+
+/* Allow ENTER key to login */
+
+document
+  .getElementById("password")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        login();
+
+      }
+
+    }
+  );
+
 </script>
+
 </body>
 </html>
