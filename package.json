@@ -1,5 +1,8 @@
 {
   "name": "avya-v3-review-system",
+  "engines": {
+  "node": "20.x"
+},
   "version": "3.0.0",
   "private": true,
   "description": "AVYA premium creative studio with SQLite review database and admin approval dashboard",
