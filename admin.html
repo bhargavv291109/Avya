@@ -3,180 +3,711 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AVYA Admin — Reviews</title>
+<title>AVYA — Admin Dashboard</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 *{box-sizing:border-box}
+
+:root{
+  --bg:#050505;
+  --panel:#0d0d0f;
+  --panel2:#111114;
+  --border:#222226;
+  --text:#f5f5f5;
+  --muted:#85858d;
+  --lime:#d9ff3f;
+  --lime2:#bce62b;
+  --red:#ff5c67;
+  --green:#54e39a;
+  --yellow:#ffd85c;
+}
 
 body{
   margin:0;
-  background:#070707;
-  color:#f4f4f4;
-  font-family:Inter,Arial,sans-serif
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(217,255,63,.07),transparent 28%),
+    radial-gradient(circle at 90% 10%,rgba(120,120,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
 }
 
-.wrap{
-  max-width:1100px;
-  margin:auto;
-  padding:32px 20px
-}
-
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:28px
-}
-
-.logo{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:-1px
-}
-
-.muted{
-  color:#9b9b9b
-}
-
-.grid{
-  display:grid;
-  gap:16px
-}
-
-.card{
-  background:#111;
-  border:1px solid #292929;
-  border-radius:18px;
-  padding:20px
-}
-
-.row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center
+button,input{
+  font:inherit;
 }
 
 button{
-  border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  font-weight:800;
-  cursor:pointer
+  cursor:pointer;
 }
 
-.approve{
-  background:#d9ff3f;
-  color:#090909
+.hidden{
+  display:none!important;
 }
 
-.reject{
-  background:#292929;
-  color:#fff
+/* ================= LOGIN ================= */
+
+.login-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
 }
 
-.danger{
-  background:#5b1717;
-  color:#fff
+.login-card{
+  width:100%;
+  max-width:430px;
+  padding:38px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.015)),
+    rgba(10,10,11,.9);
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.55),
+    inset 0 1px rgba(255,255,255,.05);
+  backdrop-filter:blur(20px);
+  animation:rise .6s ease;
 }
 
-.feature{
-  background:#292929;
-  color:#fff
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:34px;
+}
+
+.brand-mark{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:var(--lime);
+  color:#050505;
+  font-weight:900;
+  font-size:18px;
+  box-shadow:0 0 35px rgba(217,255,63,.18);
+}
+
+.brand-name{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.brand-name span{
+  color:var(--lime);
+}
+
+.login-card h1{
+  margin:0 0 8px;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.login-card .subtitle{
+  margin:0 0 28px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.input-label{
+  display:block;
+  margin-bottom:8px;
+  font-size:12px;
+  color:#aaaab1;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.input-wrap{
+  position:relative;
 }
 
 input{
   width:100%;
-  padding:13px;
-  border-radius:10px;
-  border:1px solid #333;
-  background:#0b0b0b;
+  padding:15px 16px;
+  border-radius:13px;
+  border:1px solid #29292e;
+  outline:none;
+  background:#080809;
   color:#fff;
-  margin:8px 0 14px
+  transition:.2s;
 }
 
-.login{
-  max-width:430px;
-  margin:10vh auto
+input:focus{
+  border-color:var(--lime);
+  box-shadow:0 0 0 3px rgba(217,255,63,.08);
 }
 
-.hidden{
-  display:none
+.primary-btn{
+  width:100%;
+  margin-top:16px;
+  padding:14px 18px;
+  border:0;
+  border-radius:13px;
+  background:var(--lime);
+  color:#050505;
+  font-weight:900;
+  transition:.2s;
 }
 
-.review{
-  display:grid;
-  gap:12px
-}
-
-.stars{
-  letter-spacing:2px
-}
-
-.tag{
-  font-size:12px;
-  border:1px solid #333;
-  border-radius:999px;
-  padding:5px 9px;
-  color:#bdbdbd
+.primary-btn:hover{
+  background:var(--lime2);
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(217,255,63,.12);
 }
 
 .status{
   min-height:20px;
-  margin-top:10px
+  margin:13px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard{
+  max-width:1250px;
+  margin:auto;
+  padding:26px 22px 60px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:8px 0 30px;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.header-logo{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:var(--lime);
+  color:#050505;
+  font-weight:900;
+  box-shadow:0 0 35px rgba(217,255,63,.14);
+}
+
+.header-title h1{
+  margin:0;
+  font-size:24px;
+  letter-spacing:-1px;
+}
+
+.header-title p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.header-actions{
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.btn{
+  border:1px solid var(--border);
+  background:#111114;
+  color:#eee;
+  padding:10px 14px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.btn:hover{
+  border-color:#3a3a40;
+  background:#18181c;
+  transform:translateY(-1px);
+}
+
+.btn-lime{
+  background:var(--lime);
+  border-color:var(--lime);
+  color:#050505;
+}
+
+.btn-lime:hover{
+  background:var(--lime2);
+}
+
+/* ================= STATS ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:24px;
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+  padding:21px;
+  min-height:120px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:linear-gradient(145deg,#111113,#0a0a0b);
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:-35px;
+  bottom:-45px;
+  border-radius:50%;
+  background:rgba(217,255,63,.08);
+  filter:blur(4px);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.stat-value{
+  margin-top:10px;
+  font-size:31px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+
+.stat.pending .stat-value{color:var(--yellow)}
+.stat.approved .stat-value{color:var(--green)}
+.stat.featured .stat-value{color:var(--lime)}
+
+/* ================= TOOLBAR ================= */
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.search{
+  max-width:380px;
+}
+
+.search input{
+  margin:0;
+  padding:12px 14px;
+}
+
+.filters{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.filter{
+  border:1px solid var(--border);
+  background:#0e0e10;
+  color:#aaaab1;
+  padding:9px 13px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.filter.active{
+  background:var(--lime);
+  border-color:var(--lime);
+  color:#050505;
+}
+
+/* ================= REVIEWS ================= */
+
+.reviews{
+  display:grid;
+  gap:13px;
+}
+
+.review{
+  padding:21px;
+  border:1px solid var(--border);
+  border-radius:19px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),
+    #0b0b0d;
+  transition:.22s;
+  animation:rise .35s ease;
+}
+
+.review:hover{
+  border-color:#333339;
+  transform:translateY(-1px);
+}
+
+.review-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:#19191c;
+  border:1px solid #2a2a2e;
+  color:var(--lime);
+  font-weight:900;
+}
+
+.user-name{
+  font-size:15px;
+  font-weight:800;
+}
+
+.date{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.badges{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:6px;
+}
+
+.badge{
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  border:1px solid #29292d;
+  color:#aaaab1;
+  background:#101012;
+}
+
+.badge.pending{
+  color:var(--yellow);
+  border-color:rgba(255,216,92,.2);
+  background:rgba(255,216,92,.06);
+}
+
+.badge.approved{
+  color:var(--green);
+  border-color:rgba(84,227,154,.2);
+  background:rgba(84,227,154,.06);
+}
+
+.badge.featured{
+  color:var(--lime);
+  border-color:rgba(217,255,63,.2);
+  background:rgba(217,255,63,.06);
+}
+
+.service{
+  display:inline-block;
+  margin-top:16px;
+  color:#b9b9c0;
+  font-size:11px;
+  font-weight:700;
+}
+
+.stars{
+  margin-top:9px;
+  font-size:18px;
+  letter-spacing:2px;
+  color:var(--lime);
+}
+
+.review-text{
+  margin-top:12px;
+  color:#dddde2;
+  line-height:1.65;
+  font-size:14px;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid #1d1d20;
+}
+
+.action{
+  border:1px solid #29292e;
+  background:#111114;
+  color:#eee;
+  padding:9px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  transition:.2s;
+}
+
+.action:hover{
+  background:#19191d;
+}
+
+.action.approve{
+  background:var(--lime);
+  border-color:var(--lime);
+  color:#050505;
+}
+
+.action.delete{
+  color:#ff858d;
+  border-color:rgba(255,92,103,.18);
+  background:rgba(255,92,103,.05);
+}
+
+.empty{
+  padding:60px 20px;
+  text-align:center;
+  border:1px dashed #29292d;
+  border-radius:18px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  min-width:230px;
+  max-width:360px;
+  padding:14px 17px;
+  border:1px solid #303036;
+  border-radius:13px;
+  background:#121215;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  color:#eee;
+  font-size:13px;
+  font-weight:700;
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast.success{
+  border-color:rgba(84,227,154,.35);
+}
+
+.toast.error{
+  border-color:rgba(255,92,103,.35);
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes rise{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:800px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .toolbar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .search{
+    max-width:none;
+  }
+
+}
+
+@media(max-width:560px){
+
+  .dashboard{
+    padding:18px 14px 45px;
+  }
+
+  .header{
+    align-items:flex-start;
+  }
+
+  .header-title h1{
+    font-size:20px;
+  }
+
+  .header-actions .btn:first-child{
+    display:none;
+  }
+
+  .stats{
+    gap:9px;
+  }
+
+  .stat{
+    min-height:105px;
+    padding:16px;
+  }
+
+  .stat-value{
+    font-size:26px;
+  }
+
+  .review{
+    padding:16px;
+  }
+
+  .review-top{
+    flex-direction:column;
+  }
+
+  .badges{
+    justify-content:flex-start;
+  }
+
+  .login-card{
+    padding:28px 22px;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrap">
+<!-- ================= LOGIN ================= -->
 
-  <!-- LOGIN -->
-  <div id="login" class="login card">
+<section id="login" class="login-wrap">
 
-    <h1>AVYA Admin</h1>
+  <div class="login-card">
 
-    <p class="muted">
-      Review management
+    <div class="brand">
+      <div class="brand-mark">A</div>
+
+      <div class="brand-name">
+        A<span>V</span>YA
+      </div>
+    </div>
+
+    <h1>Welcome back.</h1>
+
+    <p class="subtitle">
+      Secure admin access to your review dashboard.
     </p>
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Admin password"
-      autocomplete="current-password"
-    >
+    <label class="input-label">
+      Admin Password
+    </label>
+
+    <div class="input-wrap">
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+      >
+    </div>
 
     <button
       type="button"
-      class="approve"
+      class="primary-btn"
       id="loginBtn"
     >
-      Login
+      Sign in to Dashboard
     </button>
 
-    <p id="loginStatus" class="muted status"></p>
+    <p id="loginStatus" class="status"></p>
 
   </div>
 
+</section>
 
-  <!-- ADMIN PANEL -->
-  <div id="panel" class="hidden">
 
-    <div class="top">
+<!-- ================= DASHBOARD ================= -->
 
-      <div>
-        <div class="logo">AVYA</div>
-        <div class="muted">
-          Reviews dashboard
-        </div>
+<main id="panel" class="dashboard hidden">
+
+  <header class="header">
+
+    <div class="header-left">
+
+      <div class="header-logo">
+        A
       </div>
+
+      <div class="header-title">
+        <h1>AVYA Admin</h1>
+        <p>Reviews & customer feedback</p>
+      </div>
+
+    </div>
+
+    <div class="header-actions">
 
       <button
         type="button"
-        class="reject"
+        class="btn"
+        id="refreshBtn"
+      >
+        ↻ Refresh
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-lime"
         id="logoutBtn"
       >
         Logout
@@ -184,14 +715,92 @@ input{
 
     </div>
 
-    <div id="reviews" class="grid"></div>
+  </header>
 
-  </div>
 
-</div>
+  <!-- ================= STATS ================= -->
+
+  <section class="stats">
+
+    <div class="stat">
+      <div class="stat-label">Total Reviews</div>
+      <div id="totalCount" class="stat-value">0</div>
+    </div>
+
+    <div class="stat pending">
+      <div class="stat-label">Pending</div>
+      <div id="pendingCount" class="stat-value">0</div>
+    </div>
+
+    <div class="stat approved">
+      <div class="stat-label">Approved</div>
+      <div id="approvedCount" class="stat-value">0</div>
+    </div>
+
+    <div class="stat featured">
+      <div class="stat-label">Featured</div>
+      <div id="featuredCount" class="stat-value">0</div>
+    </div>
+
+  </section>
+
+
+  <!-- ================= TOOLBAR ================= -->
+
+  <section class="toolbar">
+
+    <div class="search">
+      <input
+        id="search"
+        type="search"
+        placeholder="Search reviews, names or services..."
+      >
+    </div>
+
+    <div class="filters">
+
+      <button class="filter active" data-filter="all">
+        All
+      </button>
+
+      <button class="filter" data-filter="pending">
+        Pending
+      </button>
+
+      <button class="filter" data-filter="approved">
+        Approved
+      </button>
+
+      <button class="filter" data-filter="featured">
+        Featured
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= REVIEW LIST ================= -->
+
+  <section id="reviews" class="reviews"></section>
+
+</main>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast" class="toast"></div>
 
 
 <script>
+
+/* =========================
+   STATE
+========================= */
+
+let allReviews = [];
+let currentFilter = "all";
+
 
 /* =========================
    LOGIN
@@ -200,17 +809,21 @@ input{
 async function login(){
 
   const password =
-    document.getElementById("password").value;
+    document.getElementById("password").value.trim();
 
   const status =
     document.getElementById("loginStatus");
 
   if(!password){
-    status.textContent = "Please enter your admin password.";
+
+    status.textContent =
+      "Please enter your admin password.";
+
     return;
   }
 
-  status.textContent = "Logging in...";
+  status.textContent =
+    "Signing in...";
 
   try{
 
@@ -243,6 +856,11 @@ async function login(){
 
       await load();
 
+      showToast(
+        "Welcome to AVYA Admin.",
+        "success"
+      );
+
     }else{
 
       status.textContent =
@@ -255,7 +873,7 @@ async function login(){
     console.error(error);
 
     status.textContent =
-      "Server connection failed. Please try again.";
+      "Server connection failed.";
 
   }
 
@@ -289,18 +907,6 @@ async function logout(){
 
 
 /* =========================
-   STAR DISPLAY
-========================= */
-
-function stars(n){
-
-  return "★".repeat(n) +
-         "☆".repeat(5-n);
-
-}
-
-
-/* =========================
    LOAD REVIEWS
 ========================= */
 
@@ -310,7 +916,10 @@ async function load(){
     document.getElementById("reviews");
 
   box.innerHTML =
-    '<div class="card"><p class="muted">Loading reviews...</p></div>';
+    `<div class="empty">
+      <div class="empty-icon">◌</div>
+      Loading reviews...
+    </div>`;
 
   try{
 
@@ -334,128 +943,24 @@ async function load(){
     const data =
       await r.json();
 
-    if(!data.length){
+    allReviews = Array.isArray(data)
+      ? data
+      : [];
 
-      box.innerHTML =
-        '<div class="card">' +
-        '<h3>No reviews yet.</h3>' +
-        '<p class="muted">' +
-        'New customer submissions will appear here.' +
-        '</p>' +
-        '</div>';
+    updateStats();
 
-      return;
-
-    }
-
-    box.innerHTML =
-      data.map(x => `
-
-        <article class="card review">
-
-          <div class="row">
-
-            <strong>
-              ${esc(x.name)}
-            </strong>
-
-            <span class="tag">
-              ${esc(x.service)}
-            </span>
-
-            <span class="tag">
-              ${x.approved ? "Approved" : "Pending"}
-            </span>
-
-            ${
-              x.featured
-              ? '<span class="tag">Featured</span>'
-              : ''
-            }
-
-          </div>
-
-          <div class="stars">
-            ${stars(x.rating)}
-          </div>
-
-          <div>
-            ${esc(x.review)}
-          </div>
-
-          <div class="muted">
-            ${new Date(x.created_at).toLocaleString()}
-          </div>
-
-          <div class="row">
-
-            ${
-              !x.approved
-              ? `
-                <button
-                  type="button"
-                  class="approve"
-                  onclick="action(${x.id},'approve')"
-                >
-                  Approve
-                </button>
-              `
-              : ''
-            }
-
-            ${
-              x.approved
-              ? `
-                <button
-                  type="button"
-                  class="feature"
-                  onclick="action(${x.id},'feature')"
-                >
-                  ${x.featured ? "Unfeature" : "Feature"}
-                </button>
-              `
-              : ''
-            }
-
-            ${
-              !x.approved
-              ? `
-                <button
-                  type="button"
-                  class="reject"
-                  onclick="action(${x.id},'reject')"
-                >
-                  Reject
-                </button>
-              `
-              : ''
-            }
-
-            <button
-              type="button"
-              class="danger"
-              onclick="action(${x.id},'delete')"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </article>
-
-      `).join("");
+    renderReviews();
 
   }catch(error){
 
     console.error(error);
 
     box.innerHTML =
-      '<div class="card">' +
-      '<h3>Could not load reviews.</h3>' +
-      '<p class="muted">' +
-      'Please refresh and try again.' +
-      '</p>' +
-      '</div>';
+      `<div class="empty">
+        <div class="empty-icon">!</div>
+        <strong>Could not load reviews.</strong>
+        <p>Please refresh and try again.</p>
+      </div>`;
 
   }
 
@@ -463,20 +968,274 @@ async function load(){
 
 
 /* =========================
-   REVIEW ACTIONS
+   STATS
+========================= */
+
+function updateStats(){
+
+  const total =
+    allReviews.length;
+
+  const pending =
+    allReviews.filter(x => !x.approved).length;
+
+  const approved =
+    allReviews.filter(x => x.approved).length;
+
+  const featured =
+    allReviews.filter(x => x.featured).length;
+
+  document.getElementById("totalCount")
+    .textContent = total;
+
+  document.getElementById("pendingCount")
+    .textContent = pending;
+
+  document.getElementById("approvedCount")
+    .textContent = approved;
+
+  document.getElementById("featuredCount")
+    .textContent = featured;
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderReviews(){
+
+  const box =
+    document.getElementById("reviews");
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+  let data =
+    allReviews.filter(x => {
+
+      if(currentFilter === "pending" && x.approved)
+        return false;
+
+      if(currentFilter === "approved" && !x.approved)
+        return false;
+
+      if(currentFilter === "featured" && !x.featured)
+        return false;
+
+      if(search){
+
+        const text =
+          `${x.name} ${x.service} ${x.review}`
+          .toLowerCase();
+
+        if(!text.includes(search))
+          return false;
+
+      }
+
+      return true;
+
+    });
+
+  if(!data.length){
+
+    box.innerHTML =
+      `<div class="empty">
+        <div class="empty-icon">✦</div>
+        <strong>No reviews found</strong>
+        <p>Try another search or filter.</p>
+      </div>`;
+
+    return;
+
+  }
+
+  box.innerHTML =
+    data.map(x => reviewHTML(x)).join("");
+
+}
+
+
+/* =========================
+   REVIEW CARD
+========================= */
+
+function reviewHTML(x){
+
+  const initials =
+    esc(
+      String(x.name || "A")
+      .trim()
+      .charAt(0)
+      .toUpperCase()
+    );
+
+  const status =
+    x.approved
+      ? `<span class="badge approved">Approved</span>`
+      : `<span class="badge pending">Pending</span>`;
+
+  const featured =
+    x.featured
+      ? `<span class="badge featured">Featured</span>`
+      : "";
+
+  const approve =
+    !x.approved
+      ? `
+        <button
+          class="action approve"
+          onclick="action(${x.id},'approve')"
+        >
+          ✓ Approve
+        </button>
+      `
+      : "";
+
+  const feature =
+    x.approved
+      ? `
+        <button
+          class="action"
+          onclick="action(${x.id},'feature')"
+        >
+          ${x.featured ? "★ Unfeature" : "☆ Feature"}
+        </button>
+      `
+      : "";
+
+  const reject =
+    !x.approved
+      ? `
+        <button
+          class="action"
+          onclick="action(${x.id},'reject')"
+        >
+          ✕ Reject
+        </button>
+      `
+      : "";
+
+  return `
+
+    <article class="review">
+
+      <div class="review-top">
+
+        <div class="user">
+
+          <div class="avatar">
+            ${initials}
+          </div>
+
+          <div>
+
+            <div class="user-name">
+              ${esc(x.name)}
+            </div>
+
+            <div class="date">
+              ${formatDate(x.created_at)}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="badges">
+          ${status}
+          ${featured}
+        </div>
+
+      </div>
+
+      <div class="service">
+        ${esc(x.service || "Service")}
+      </div>
+
+      <div class="stars">
+        ${stars(x.rating)}
+      </div>
+
+      <div class="review-text">
+        ${esc(x.review)}
+      </div>
+
+      <div class="actions">
+
+        ${approve}
+        ${feature}
+        ${reject}
+
+        <button
+          class="action delete"
+          onclick="action(${x.id},'delete')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================
+   STARS
+========================= */
+
+function stars(n){
+
+  n = Math.max(
+    0,
+    Math.min(
+      5,
+      Number(n) || 0
+    )
+  );
+
+  return "★".repeat(n) +
+         "☆".repeat(5-n);
+
+}
+
+
+/* =========================
+   ACTIONS
 ========================= */
 
 async function action(id,type){
 
+  if(type === "delete"){
+
+    const ok =
+      confirm(
+        "Delete this review permanently?"
+      );
+
+    if(!ok)
+      return;
+
+  }
+
   const url =
     type === "delete"
-    ? `/api/admin/reviews/${id}`
-    : `/api/admin/reviews/${id}/${type}`;
+      ? `/api/admin/reviews/${id}`
+      : `/api/admin/reviews/${id}/${type}`;
 
   const method =
     type === "delete"
-    ? "DELETE"
-    : "PATCH";
+      ? "DELETE"
+      : "PATCH";
 
   try{
 
@@ -492,9 +1251,19 @@ async function action(id,type){
 
       await load();
 
+      showToast(
+        type === "delete"
+          ? "Review deleted."
+          : `Review ${type}d successfully.`,
+        "success"
+      );
+
     }else{
 
-      alert("Action failed.");
+      showToast(
+        "Action failed.",
+        "error"
+      );
 
     }
 
@@ -502,7 +1271,10 @@ async function action(id,type){
 
     console.error(error);
 
-    alert("Server connection failed.");
+    showToast(
+      "Server connection failed.",
+      "error"
+    );
 
   }
 
@@ -510,27 +1282,71 @@ async function action(id,type){
 
 
 /* =========================
-   SECURITY ESCAPE
+   FILTERS
 ========================= */
 
-function esc(v){
+document
+  .querySelectorAll(".filter")
+  .forEach(button => {
 
-  return String(v).replace(
-    /[&<>"']/g,
-    c => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[c])
-  );
+    button.addEventListener(
+      "click",
+      () => {
 
-}
+        document
+          .querySelectorAll(".filter")
+          .forEach(b =>
+            b.classList.remove("active")
+          );
+
+        button.classList.add("active");
+
+        currentFilter =
+          button.dataset.filter;
+
+        renderReviews();
+
+      }
+    );
+
+  });
 
 
 /* =========================
-   BUTTON EVENTS
+   SEARCH
+========================= */
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    renderReviews
+  );
+
+
+/* =========================
+   REFRESH
+========================= */
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await load();
+
+      showToast(
+        "Dashboard refreshed.",
+        "success"
+      );
+
+    }
+  );
+
+
+/* =========================
+   LOGIN EVENTS
 ========================= */
 
 document
@@ -548,13 +1364,11 @@ document
   );
 
 
-/* Allow ENTER key to login */
-
 document
   .getElementById("password")
   .addEventListener(
     "keydown",
-    function(event){
+    event => {
 
       if(event.key === "Enter"){
 
@@ -566,6 +1380,83 @@ document
 
     }
   );
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(message,type="success"){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    `toast show ${type}`;
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.classList.remove("show");
+      },
+      2800
+    );
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function formatDate(value){
+
+  try{
+
+    return new Date(value)
+      .toLocaleString(
+        undefined,
+        {
+          dateStyle:"medium",
+          timeStyle:"short"
+        }
+      );
+
+  }catch{
+
+    return "";
+
+  }
+
+}
+
+
+/* =========================
+   SECURITY ESCAPE
+========================= */
+
+function esc(v){
+
+  return String(v ?? "")
+    .replace(
+      /[&<>"']/g,
+      c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[c])
+    );
+
+}
 
 </script>
 
